@@ -1,7 +1,7 @@
 format_version: 10
 pipelines:
   deploy_highscore_site:
-    group: defaultGroup
+    group: highscore_site
     label_template: ${COUNT}
     lock_behavior: none
     display_order: -1
@@ -12,92 +12,92 @@ pipelines:
         auto_update: true
         branch: main
     stages:
-    - build:
-        fetch_materials: true
-        keep_artifacts: false
-        clean_workspace: true
-        approval:
-          type: success
-          allow_only_on_success: false
-        jobs:
-          install-build:
-            timeout: 0
-            artifacts:
-            - build:
-                source: dist
-                destination: astrojs-highscore
-            tasks:
-            - exec:
-                arguments:
-                - install
-                command: npm
-                working_directory: ./
-                run_if: passed
-            - exec:
-                arguments:
-                - run
-                - build
-                command: npm
-                working_directory: ./
-                run_if: passed
-    - packer:
-        fetch_materials: true
-        keep_artifacts: false
-        clean_workspace: false
-        approval:
-          type: success
-          allow_only_on_success: false
-        jobs:
-          build:
-            timeout: 0
-            tasks:
-            - fetch:
-                is_file: false
-                source: astrojs-highscore/astrojs-highscore/dist
-                destination: ./dist
-                pipeline: deploy_highscore_site
-                stage: build
-                job: install-build
-                artifact_origin: gocd
-                run_if: passed
-            - exec:
-                arguments:
-                - init
-                - .
-                command: packer
-                working_directory: ./packer
-                run_if: passed
-            - exec:
-                arguments:
-                - build
-                - .
-                command: packer
-                working_directory: ./packer
-                run_if: passed
-    - deploy:
-        fetch_materials: true
-        keep_artifacts: false
-        clean_workspace: true
-        approval:
-          type: manual
-          allow_only_on_success: true
-        jobs:
-          terraform:
-            timeout: 0
-            tasks:
-            - exec:
-                arguments:
-                - init
-                command: terraform
-                working_directory: ./terraform
-                run_if: passed
-            - exec:
-                arguments:
-                - apply
-                - -auto-approve
-                - -var
-                - ssh_key=ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgffnBNnhr/S5hhyCzS5gH6eOigMNwlQRdi/Ps7GGB/
-                  evan.tatayhinds@protonmail.com
-                command: terraform
-                working_directory: ./terraform
-                run_if: passed
+      - build:
+          fetch_materials: true
+          keep_artifacts: false
+          clean_workspace: true
+          approval:
+            type: success
+            allow_only_on_success: false
+          jobs:
+            install-build:
+              timeout: 0
+              artifacts:
+                - build:
+                    source: dist
+                    destination: astrojs-highscore
+              tasks:
+                - exec:
+                    arguments:
+                      - install
+                    command: npm
+                    working_directory: ./
+                    run_if: passed
+                - exec:
+                    arguments:
+                      - run
+                      - build
+                    command: npm
+                    working_directory: ./
+                    run_if: passed
+      - packer:
+          fetch_materials: true
+          keep_artifacts: false
+          clean_workspace: false
+          approval:
+            type: success
+            allow_only_on_success: false
+          jobs:
+            build:
+              timeout: 0
+              tasks:
+                - fetch:
+                    is_file: false
+                    source: astrojs-highscore/astrojs-highscore/dist
+                    destination: ./dist
+                    pipeline: deploy_highscore_site
+                    stage: build
+                    job: install-build
+                    artifact_origin: gocd
+                    run_if: passed
+                - exec:
+                    arguments:
+                      - init
+                      - .
+                    command: packer
+                    working_directory: ./packer
+                    run_if: passed
+                - exec:
+                    arguments:
+                      - build
+                      - .
+                    command: packer
+                    working_directory: ./packer
+                    run_if: passed
+      - deploy:
+          fetch_materials: true
+          keep_artifacts: false
+          clean_workspace: true
+          approval:
+            type: manual
+            allow_only_on_success: true
+          jobs:
+            terraform:
+              timeout: 0
+              tasks:
+                - exec:
+                    arguments:
+                      - init
+                    command: terraform
+                    working_directory: ./terraform
+                    run_if: passed
+                - exec:
+                    arguments:
+                      - apply
+                      - -auto-approve
+                      - -var
+                      - ssh_key=ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINgffnBNnhr/S5hhyCzS5gH6eOigMNwlQRdi/Ps7GGB/
+                        evan.tatayhinds@protonmail.com
+                    command: terraform
+                    working_directory: ./terraform
+                    run_if: passed
