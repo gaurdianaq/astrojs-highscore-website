@@ -12,6 +12,11 @@ variable "ami_prefix" {
   default = "gaurdianaq-web-server"
 }
 
+variable "build_location" {
+  type = string
+  default = "../dist"
+}
+
 locals {
   timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
@@ -60,7 +65,7 @@ build {
   }
 
   provisioner "file" {
-    source = "../dist/"
+    source = "${var.build_location}"
     destination = "~/www/"
   }
 
@@ -75,7 +80,6 @@ build {
       "rm -r ~/www",
       "sudo setenforce 0",
       "sudo systemctl enable nginx"
-      //"sudo nginx -s reload"
     ]
   }
 }

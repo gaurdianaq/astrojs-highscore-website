@@ -53,7 +53,7 @@ pipelines:
               tasks:
                 - fetch:
                     is_file: false
-                    source: astrojs-highscore/astrojs-highscore/dist
+                    source: astrojs-highscore
                     destination: ./dist
                     pipeline: deploy_highscore_site
                     stage: build
@@ -71,6 +71,8 @@ pipelines:
                     arguments:
                       - build
                       - .
+                      - -var
+                      - build_location=../astrojs-highscore/dist
                     command: packer
                     working_directory: ./packer
                     run_if: passed
