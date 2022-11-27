@@ -4,7 +4,8 @@ environments:
     environment_variables:
       AWS_ACCESS_KEY_ID: "{{SECRET:[AWS_ACCESS_KEY_ID][aws_secrets]}}"
       AWS_SECRET_ACCESS_KEY: "{{SECRET:[AWS_SECRET_ACCESS_KEY][aws_secrets]}}"
-    pipelines: deploy_highscore_site
+    pipelines:
+      - deploy_highscore_site
 pipelines:
   deploy_highscore_site:
     group: default
