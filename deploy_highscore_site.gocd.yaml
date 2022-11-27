@@ -70,9 +70,9 @@ pipelines:
                 - exec:
                     arguments:
                       - build
-                      - .
                       - -var
                       - "'build_location=../astrojs-highscore/dist'"
+                      - .
                     command: packer
                     working_directory: ./packer
                     run_if: passed
