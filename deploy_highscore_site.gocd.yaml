@@ -1,7 +1,7 @@
 format_version: 10
 pipelines:
   deploy_highscore_site:
-    group: highscore_site
+    #group: highscore_site
     label_template: ${COUNT}
     lock_behavior: none
     display_order: -1
