@@ -54,7 +54,7 @@ pipelines:
                 - fetch:
                     is_file: false
                     source: astrojs-highscore
-                    destination: ./dist
+                    destination: ./
                     pipeline: deploy_highscore_site
                     stage: build
                     job: install-build
