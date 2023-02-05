@@ -33,19 +33,20 @@ pipelines:
                 - build:
                     source: dist
                     destination: astrojs-highscore
+                    working_directory: ./app
               tasks:
                 - exec:
                     arguments:
                       - install
                     command: npm
-                    working_directory: ./
+                    working_directory: ./app
                     run_if: passed
                 - exec:
                     arguments:
                       - run
                       - build
                     command: npm
-                    working_directory: ./
+                    working_directory: ./app
                     run_if: passed
       - packer:
           fetch_materials: true
